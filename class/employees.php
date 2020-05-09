@@ -5,7 +5,7 @@
         private $conn;
 
         // Table
-        private $table_name = "Employee";
+        private $db_table = "Employee";
 
         // Columns
         public $id;
@@ -22,16 +22,16 @@
 
         // GET ALL
         public function getEmployees(){
-            $query = "SELECT id, name, email, age, designation, created FROM " . $this->table_name . "";
-            $stmt = $this->conn->prepare($query);
+            $sqlQuery = "SELECT id, name, email, age, designation, created FROM " . $this->db_table . "";
+            $stmt = $this->conn->prepare($sqlQuery);
             $stmt->execute();
             return $stmt;
         }
 
         // CREATE
         public function createEmployee(){
-            $query = "INSERT INTO
-                        ". $this->table_name ."
+            $sqlQuery = "INSERT INTO
+                        ". $this->db_table ."
                     SET
                         name = :name, 
                         email = :email, 
@@ -39,7 +39,7 @@
                         designation = :designation, 
                         created = :created";
         
-            $stmt = $this->conn->prepare($query);
+            $stmt = $this->conn->prepare($sqlQuery);
         
             // sanitize
             $this->name=htmlspecialchars(strip_tags($this->name));
@@ -62,9 +62,39 @@
         }
 
         // UPDATE
+        public function getSingleEmployee(){
+            $sqlQuery = "SELECT
+                        id, 
+                        name, 
+                        email, 
+                        age, 
+                        designation, 
+                        created
+                      FROM
+                        ". $this->db_table ."
+                    WHERE 
+                       id = ?
+                    LIMIT 0,1";
+
+            $stmt = $this->conn->prepare($sqlQuery);
+
+            $stmt->bindParam(1, $this->id);
+
+            $stmt->execute();
+
+            $dataRow = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            $this->name = $dataRow['name'];
+            $this->email = $dataRow['email'];
+            $this->age = $dataRow['age'];
+            $this->designation = $dataRow['designation'];
+            $this->created = $dataRow['created'];
+        }        
+
+        // UPDATE
         public function updateEmployee(){
-            $query = "UPDATE
-                        ". $this->table_name ."
+            $sqlQuery = "UPDATE
+                        ". $this->db_table ."
                     SET
                         name = :name, 
                         email = :email, 
@@ -74,7 +104,7 @@
                     WHERE 
                         id = :id";
         
-            $stmt = $this->conn->prepare($query);
+            $stmt = $this->conn->prepare($sqlQuery);
         
             $this->name=htmlspecialchars(strip_tags($this->name));
             $this->email=htmlspecialchars(strip_tags($this->email));
@@ -99,8 +129,8 @@
 
         // DELETE
         function deleteEmployee(){
-            $query = "DELETE FROM " . $this->table_name . " WHERE id = ?";
-            $stmt = $this->conn->prepare($query);
+            $sqlQuery = "DELETE FROM " . $this->db_table . " WHERE id = ?";
+            $stmt = $this->conn->prepare($sqlQuery);
         
             $this->id=htmlspecialchars(strip_tags($this->id));
         
