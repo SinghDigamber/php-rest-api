@@ -14,26 +14,29 @@
     $itemCount = $stmt->rowCount();
 
 
-    echo json_encode($itemCount);
+ 
 
     if($itemCount > 0){
         
         $employeeArr = array();
-        $employeeArr["body"] = array();
-        $employeeArr["itemCount"] = $itemCount;
+        
+ 
 
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
             extract($row);
             $e = array(
-                "id" => $id,
-                "name" => $name,
-                "email" => $email,
-                "age" => $age,
-                "designation" => $designation,
-                "created" => $created
+                "id_reservations" => $id_reservations,
+                "cliente" => $nombre,
+                "lugar_inicio" => $lugar_inicio,
+                "lugar_destino" => $lugar_destino,
+                "cupos" => $cupos,
+                "conductor" => $nombre,
+                "censo" => $censo,
+                "placa" => $placa,
+                "fecha" => $fecha 
             );
 
-            array_push($employeeArr["body"], $e);
+            array_push($employeeArr, $e);
         }
         echo json_encode($employeeArr);
     }
@@ -41,7 +44,6 @@
     else{
         http_response_code(404);
         echo json_encode(
-            array("message" => "No record found.")
+            array("message" => "No record found." )
         );
     }
-?>
