@@ -14,16 +14,21 @@
     $item = new Employee($db);
 
     $data = json_decode(file_get_contents("php://input"));
-
-    $item->name = $data->name;
-    $item->email = $data->email;
-    $item->age = $data->age;
-    $item->designation = $data->designation;
-    $item->created = date('Y-m-d H:i:s');
+  
     
+    $item->id_reservations = $data->id_reservations;
+    $item->id_users = $data->id_users;
+    $item->lugar_inicio = $data->lugar_inicio;
+    $item->lugar_destino = $data->lugar_destino;
+    $item->cupos = $data->cupos;
+    $item->id_drivers = $data->id_drivers;
+    $item->censo_drivers = $data->censo_drivers;
+    $item->placa_drivers = $data->placa_drivers;
+    $item->fecha = date('Y-m-d H:i:s'); 
     if($item->createEmployee()){
-        echo 'Employee created successfully.';
+        echo 'created successfully.';
     } else{
-        echo 'Employee could not be created.';
+        echo 'could not be created.';
     }
-?>
+    
+    
